@@ -1,0 +1,18 @@
+# ui/.gitignore — Next.js relative-path rules
+# Global ignores (node_modules, .env, OS files, editors) are in the root .gitignore.
+# Only paths that must be expressed relative to ui/ belong here.
+
+# Next.js build output
+/.next/
+/out/
+/build/
+
+# TypeScript build cache
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel deployment artifacts
+.vercel/
+
+# Test coverage output
+/coverage/
