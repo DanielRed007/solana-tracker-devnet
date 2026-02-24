@@ -1,0 +1,129 @@
+# =============================================================================
+# solana-tracker-devnet — root .gitignore
+# Covers: ui/ (Next.js), backend/ (Python/FastAPI), OS, editors, Docker
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Environment & secrets — never commit these
+# -----------------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# -----------------------------------------------------------------------------
+# ui/ — Next.js / Node
+# -----------------------------------------------------------------------------
+ui/node_modules/
+ui/.next/
+ui/out/
+ui/build/
+ui/.pnp
+ui/.pnp.*
+ui/.yarn/*
+!ui/.yarn/patches
+!ui/.yarn/plugins
+!ui/.yarn/releases
+!ui/.yarn/versions
+ui/coverage/
+ui/*.tsbuildinfo
+ui/next-env.d.ts
+ui/.vercel/
+ui/npm-debug.log*
+ui/yarn-debug.log*
+ui/yarn-error.log*
+ui/.pnpm-debug.log*
+
+# -----------------------------------------------------------------------------
+# backend/ — Python / FastAPI
+# -----------------------------------------------------------------------------
+backend/.venv/
+backend/venv/
+backend/env/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/**/*.py[cod]
+backend/**/*.pyo
+backend/*.egg-info/
+backend/**/*.egg-info/
+backend/dist/
+backend/build/
+backend/.mypy_cache/
+backend/.ruff_cache/
+backend/.pytest_cache/
+backend/.coverage
+backend/coverage.xml
+backend/htmlcov/
+backend/.hypothesis/
+
+# Alembic — keep migrations, ignore generated env artifacts
+backend/alembic/__pycache__/
+
+# -----------------------------------------------------------------------------
+# Docker
+# -----------------------------------------------------------------------------
+docker-compose.override.yml
+
+# -----------------------------------------------------------------------------
+# OS artifacts
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# -----------------------------------------------------------------------------
+# Editors & IDEs
+# -----------------------------------------------------------------------------
+# VS Code
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# JetBrains (PyCharm, WebStorm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+.~lock.*
+
+# Emacs
+\#*\#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# -----------------------------------------------------------------------------
+# Logs
+# -----------------------------------------------------------------------------
+*.log
+logs/
+*.log.*
+
+# -----------------------------------------------------------------------------
+# Temporary & misc
+# -----------------------------------------------------------------------------
+*.tmp
+*.temp
+*.bak
+*.orig
+.cache/
+tmp/
+temp/
