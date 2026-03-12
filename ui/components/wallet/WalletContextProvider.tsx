@@ -9,9 +9,10 @@
  * imports this file, and Next.js correctly hydrates it on the browser.
  *
  * Provider hierarchy:
- *   ConnectionProvider (manages the Solana RPC connection)
- *     └── WalletProvider (manages wallet state and adapter lifecycle)
- *           └── {children}
+ *   NetworkProvider (manages active network state)
+ *     └── ConnectionProvider (manages the Solana RPC connection)
+ *           └── WalletProvider (manages wallet state and adapter lifecycle)
+ *                 └── {children}
  */
 
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
@@ -21,6 +22,8 @@ import {
 } from '@solana/wallet-adapter-wallets';
 import { useMemo } from 'react';
 
+import { NetworkProvider } from '@/features/wallet/NetworkContext';
+import { useNetwork } from '@/features/wallet/useNetwork';
 import { getRpcEndpoint } from '@/lib/solana/connection';
 
 /** Props for the WalletContextProvider component. */
@@ -30,7 +33,43 @@ export interface WalletContextProviderProps {
 }
 
 /**
+ * Inner provider that consumes network context to compute the RPC endpoint.
+ *
+ * Separated from the outer provider so that `useNetwork` can be called
+ * inside the `NetworkProvider` tree. When the user switches networks via
+ * the `NetworkSelector`, the endpoint updates and `ConnectionProvider`
+ * re-renders with the new connection.
+ *
+ * @param props - Component props.
+ * @returns The wallet adapter provider tree.
+ */
+function WalletAdapterProviders({
+  children,
+}: Readonly<{ children: React.ReactNode }>): React.JSX.Element {
+  const { network } = useNetwork();
+
+  const endpoint = useMemo(() => getRpcEndpoint(network), [network]);
+
+  const wallets = useMemo(
+    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
+    [],
+  );
+
+  return (
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets} autoConnect={false}>
+        {children}
+      </WalletProvider>
+    </ConnectionProvider>
+  );
+}
+
+/**
  * Provides Solana wallet connection context to all child components.
+ *
+ * Wraps `NetworkProvider` → `ConnectionProvider` → `WalletProvider`.
+ * The network defaults to `'devnet'` (from env config) and can be changed
+ * at runtime via the `useNetwork` hook / `NetworkSelector` component.
  *
  * Configures Phantom and Solflare wallet adapters. The `wallets` array is
  * memoized to prevent adapter instances from being recreated on every render
@@ -45,23 +84,14 @@ export interface WalletContextProviderProps {
  * separately and add its adapter to the wallets array.
  *
  * @param props - Component props.
- * @returns The provider tree wrapping children.
+ * @returns The full provider tree wrapping children.
  */
 export function WalletContextProvider({
   children,
 }: WalletContextProviderProps): React.JSX.Element {
-  const endpoint = useMemo(() => getRpcEndpoint(), []);
-
-  const wallets = useMemo(
-    () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
-    [],
-  );
-
   return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect={false}>
-        {children}
-      </WalletProvider>
-    </ConnectionProvider>
+    <NetworkProvider>
+      <WalletAdapterProviders>{children}</WalletAdapterProviders>
+    </NetworkProvider>
   );
 }

@@ -25,28 +25,32 @@ const NETWORK_TO_CLUSTER: Record<SolanaNetwork, Cluster> = {
 };
 
 /**
- * Returns the RPC endpoint URL for the configured Solana network.
+ * Returns the RPC endpoint URL for a given Solana network.
  *
  * Uses the public Solana cluster URLs via `clusterApiUrl`. These endpoints
  * are appropriate for wallet adapter use (not for heavy data fetching, which
  * should go through the backend RPC client to leverage rate-limit caching).
  *
+ * @param network - The Solana network to connect to. Defaults to the
+ *   configured network from environment variables.
  * @returns A fully-formed RPC endpoint URL string.
  */
-export function getRpcEndpoint(): string {
-  const cluster = NETWORK_TO_CLUSTER[appConfig.solanaNetwork];
+export function getRpcEndpoint(network?: SolanaNetwork): string {
+  const cluster = NETWORK_TO_CLUSTER[network ?? appConfig.solanaNetwork];
   return clusterApiUrl(cluster);
 }
 
 /**
- * Creates a new Solana Connection instance for the configured network.
+ * Creates a new Solana Connection instance for the given network.
  *
  * The `'confirmed'` commitment is appropriate for balance and token account
  * reads in a portfolio tracker context, providing a balance between
  * freshness and stability.
  *
+ * @param network - The Solana network to connect to. Defaults to the
+ *   configured network from environment variables.
  * @returns A configured `Connection` instance.
  */
-export function createSolanaConnection(): Connection {
-  return new Connection(getRpcEndpoint(), 'confirmed');
+export function createSolanaConnection(network?: SolanaNetwork): Connection {
+  return new Connection(getRpcEndpoint(network), 'confirmed');
 }
