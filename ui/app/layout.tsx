@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { WalletContextProvider } from '@/components/wallet/WalletContextProvider';
+import { SwrProvider } from '@/lib/swr/SwrProvider';
 
 import './globals.css';
 
@@ -28,7 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <WalletContextProvider>{children}</WalletContextProvider>
+        <WalletContextProvider>
+          <SwrProvider>{children}</SwrProvider>
+        </WalletContextProvider>
       </body>
     </html>
   );

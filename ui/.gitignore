@@ -2,6 +2,9 @@
 # Global ignores (node_modules, .env, OS files, editors) are in the root .gitignore.
 # Only paths that must be expressed relative to ui/ belong here.
 
+# Dependencies
+node_modules/
+
 # Next.js build output
 /.next/
 /out/
