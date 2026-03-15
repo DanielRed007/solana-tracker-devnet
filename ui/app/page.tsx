@@ -3,6 +3,8 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Coins, LayoutDashboard, Loader2, TrendingUp, Wallet } from 'lucide-react';
 
+import { ExploreSection } from '@/components/explore/ExploreSection';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { MetricCard } from '@/components/shared/MetricCard';
@@ -119,6 +121,10 @@ export default function DashboardPage(): React.JSX.Element {
             </div>
           </CardContent>
         </Card>
+
+        <div className="mt-8">
+          <ExploreSection />
+        </div>
       </main>
 
       <footer className="border-t border-border py-4 text-center text-xs text-muted-foreground">

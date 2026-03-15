@@ -1,6 +1,5 @@
 'use client';
 
-import { useWallet } from '@solana/wallet-adapter-react';
 import type { KeyedMutator } from 'swr';
 import useSWR from 'swr';
 
@@ -8,7 +7,7 @@ import { useNetwork } from '@/features/wallet/useNetwork';
 import { tokenHoldingsKey } from '@/lib/swr/keys';
 import type { TokenHoldingResponse, TokenHoldingsResponse } from '@/types/api';
 
-export interface UseTokenHoldingsResult {
+export interface UseExploreTokensResult {
   readonly holdings: readonly TokenHoldingResponse[] | undefined;
   readonly isLoading: boolean;
   readonly isError: boolean;
@@ -16,13 +15,9 @@ export interface UseTokenHoldingsResult {
   readonly mutate: KeyedMutator<TokenHoldingsResponse>;
 }
 
-export function useTokenHoldings(): UseTokenHoldingsResult {
-  const { publicKey } = useWallet();
+export function useExploreTokens(address: string | null): UseExploreTokensResult {
   const { network } = useNetwork();
-
-  const address = publicKey?.toBase58() ?? null;
   const key = tokenHoldingsKey(address, network);
-
   const { data, error, isLoading, mutate } = useSWR<TokenHoldingsResponse>(key);
 
   return {
